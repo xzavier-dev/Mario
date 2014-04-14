@@ -22,6 +22,8 @@ public class CameraFollowControl : MonoBehaviour {
     private float followIncrease = 0;
     private float startTime = 0;
 
+    private Vector3 tmp = Vector3.zero;
+
     void Start() {
 
         GlobalManager.instance.globalGameController.cameraView = CameraView;
@@ -51,7 +53,9 @@ public class CameraFollowControl : MonoBehaviour {
                 targetPos.y = offset_2DV.y;
             }
 
+            
             transform.position = Vector3.Lerp( transform.position, targetPos, Time.deltaTime * followIncrease );
+            //transform.position = Vector3.SmoothDamp( transform.position, targetPos,ref tmp, Time.deltaTime * 200);
             transform.rotation = Quaternion.Lerp( transform.rotation, targetRot ,Time.deltaTime * followIncrease);
 
         } else {        // 3D View

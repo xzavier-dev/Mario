@@ -36,6 +36,15 @@ public class LevelEditor : EditorWindow{
             isEdit = true;
 
         }
+        if ( GUILayout.Button( "Save As New Level" ,GUILayout.Height(30)) ) {
+            if ( levelName == "" ) {
+                Debug.LogError( " You should enter a level name" );
+                return;
+            } else {
+                SaveLevel( false );
+            }
+        
+        }
         GUILayout.EndVertical();
     }
 
@@ -75,11 +84,9 @@ public class LevelEditor : EditorWindow{
 
         if ( isSaveAs ) {
             if ( levelSaveAsName == "" ) { return; }
-
-
-
         } else {
-
+            LevelDataWizard.SaveLevel( levelName );
+            AssetDatabase.Refresh();
         }
 
     }

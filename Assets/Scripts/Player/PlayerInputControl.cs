@@ -27,7 +27,7 @@ public class PlayerInputControl : MonoBehaviour {
 
     void Update() {
 #if UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_STANDALONE_LINUX || UNITY_STANDALONE_OSX
-
+        
         xAxis = Input.GetAxis("Horizontal");
         yAxis = Input.GetAxis("Vertical");
 

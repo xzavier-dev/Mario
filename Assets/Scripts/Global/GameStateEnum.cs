@@ -23,3 +23,8 @@ public enum CollisionFlag_t {
     FOOT,
     BODY,
 }
+
+public enum LevelLoadMode_t {
+    ALL,
+    ACCORDINGPLAYERPOS,
+}

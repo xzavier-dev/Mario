@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEditor;
+using System.Xml;
 
 public class LevelEditor : EditorWindow{
     [MenuItem( "Game Tool/Level Editor" )]
@@ -45,10 +46,24 @@ public class LevelEditor : EditorWindow{
             }
         
         }
+        if ( GUILayout.Button( "Decrypt", GUILayout.Height( 30 ) ) ) {
+            if ( levelName == "" ) {
+                Debug.LogError( " You should enter a level name" );
+                return;
+            } else {
+                DecryptLevelDataFile();
+                levelName = "";
+            }
+        }
         GUILayout.EndVertical();
     }
 
+
+   
+    
+
     void DrawEditPanel() {
+    
 
         GUILayout.Label( "" );        
 
@@ -58,12 +73,12 @@ public class LevelEditor : EditorWindow{
 
         GUILayout.Label("");
 
-        GUILayout.BeginHorizontal();
         levelSaveAsName = GUILayout.TextField( levelSaveAsName,GUILayout.Height(30) );
-        if ( GUILayout.Button( "Save As", GUILayout.Width( 100 ),GUILayout.Height(30) ) ) {
+        GUILayout.BeginHorizontal();
+        if ( GUILayout.Button( "Save As",GUILayout.Height(30) ) ) {
             SaveLevel( true );
         }
-        if ( GUILayout.Button( "Clean", GUILayout.Width( 100 ),GUILayout.Height(30) ) ) {
+        if ( GUILayout.Button( "Clean", GUILayout.Height(30) ) ) {
             Clean();
         }
         GUILayout.EndHorizontal();
@@ -95,6 +110,15 @@ public class LevelEditor : EditorWindow{
 
     }
 
+    void DecryptLevelDataFile() {
+        string data = DataCenter.LoadDataFromFile( Application.dataPath + "/Resources/LevelData/", levelName, true );
+        XmlDocument xmlDoc = new XmlDocument();
+        xmlDoc.InnerXml = data;
+        xmlDoc.Save( Application.dataPath + "/Resources/LevelData/" + levelName + "_dc.xml" );
+        AssetDatabase.Refresh();
+        
+        
+    }
 
     
 

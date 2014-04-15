@@ -36,12 +36,19 @@ public class LevelDataWizard {
                 continue;
             }
 
-            XmlElement objRoot = xmlDoc.CreateElement( "ObjectName" );
-            objRoot.InnerText = obj.name;
+            XmlElement objRoot = xmlDoc.CreateElement( "Obj" );
+            objRoot.SetAttribute( "ObjName", obj.name );
 
-            XmlElement objParam = xmlDoc.CreateElement( "Pos" );
+            /*
+            XmlElement objParam = xmlDoc.CreateElement( "Name" );
+            objParam.InnerText = obj.name;
+            objRoot.AppendChild( objParam );
+            */
+
+            XmlElement objParam;
+
+            objParam = xmlDoc.CreateElement( "Pos" );
             objParam.InnerText = string.Format( "{0}_{1}_{2}", obj.transform.position.x, obj.transform.position.y, obj.transform.position.z );
-
             objRoot.AppendChild( objParam );
 
 

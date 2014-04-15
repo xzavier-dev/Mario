@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -7,8 +8,9 @@ public class LevelLoader : MonoBehaviour {
     /// <summary>
     /// level data parsed from level xml data, Hashtable has the gameobject params, like position, or saved script variables.
     /// </summary>
-    Dictionary<string,Hashtable> levelData = new Dictionary<string, Hashtable>();
-
+    List<Hashtable> levelData = new List<Hashtable>();
+   
+    
     bool isAvaliableLevelData = false;
     Vector3 lastObjPos = Vector3.zero;
     GameObject lastObj = null;
@@ -16,11 +18,11 @@ public class LevelLoader : MonoBehaviour {
     void Start() {
         levelData = LevelDataWizard.LoadLevel( GlobalManager.instance.globalGameController.playerData.currentLevelName );
         isAvaliableLevelData = true;
-
+        
         //StartCoroutine( LevelDataWizard.LoadLevel( GlobalManager.instance.globalGameController.playerData.currentLevelName, LevelDataReady ) );
     }
 
-    void LevelDataReady( Dictionary<string, Hashtable> data ) {
+    void LevelDataReady( List<Hashtable> data ) {
         levelData = data;
         isAvaliableLevelData = true;
     }

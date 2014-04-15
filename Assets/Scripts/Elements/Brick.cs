@@ -4,11 +4,11 @@ using System.Collections;
 public class Brick : MonoBehaviour {
 
     public bool isPickStuff = false;
-    public GameObject pickStuff = null;
-    public int stuffCount = 0;
-
-    public string pickStuffName = null;
     public bool isbreakBrick = false;
+    public string pickStuffName = null;
+    public int stuffCount = 0;
+    public GameObject pickStuff = null;
+
 
     void Start()
     {

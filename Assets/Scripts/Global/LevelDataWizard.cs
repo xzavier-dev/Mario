@@ -14,8 +14,8 @@ using System.Collections.Generic;
 
 public class LevelDataWizard {
     
-    public delegate void LoadLevelDataCallBack(Dictionary<string,Hashtable> levelData);
-
+    //public delegate void LoadLevelDataCallBack(Dictionary<string,Hashtable> levelData);
+    public delegate void LoadLevelDataCallBack( List<Hashtable> levelData );
     /// <summary>
     /// SaveLevel
     /// </summary>
@@ -23,28 +23,64 @@ public class LevelDataWizard {
     /// <returns>XmlDoc</returns>
     static public XmlDocument SaveLevel(string saveName) {
         GameObject[] gobjs = Object.FindObjectsOfType( typeof( GameObject ) ) as GameObject[];
+        //SortObjByPosX( ref gobjs, 0, gobjs.Length - 1 );        // sort the gameobject in the scene according position of axis z
+  
         XmlDocument xmlDoc = new XmlDocument();
+        XmlElement root = xmlDoc.CreateElement( "LevelData" );
+        xmlDoc.AppendChild( root );
+
+        
 
         foreach ( GameObject obj in gobjs ) {
             if ( obj.layer != LayerMask.NameToLayer( "Element" ) ) {        // if not element layer,
                 continue;
             }
 
+            XmlElement objRoot = xmlDoc.CreateElement( "ObjectName" );
+            objRoot.InnerText = obj.name;
+
+            XmlElement objParam = xmlDoc.CreateElement( "Pos" );
+            objParam.InnerText = string.Format( "{0}_{1}_{2}", obj.transform.position.x, obj.transform.position.y, obj.transform.position.z );
+
+            objRoot.AppendChild( objParam );
+
+
             switch ( obj.name ) {
                 case "Brick":
+                    Brick brickScript = obj.GetComponent<Brick>();
 
+                    objParam = xmlDoc.CreateElement( "IsBreakBrick" );
+                    objParam.InnerText = brickScript.isbreakBrick ? "1" : "0";
+                    objRoot.AppendChild( objParam );
+
+                    objParam = xmlDoc.CreateElement( "IsPickStuff" );
+                    objParam.InnerText = brickScript.isPickStuff ? "1" : "0";
+                    objRoot.AppendChild( objParam );
+
+                    objParam = xmlDoc.CreateElement( "PickStuffName" );
+                    objParam.InnerText = brickScript.pickStuffName;
+                    objRoot.AppendChild( objParam );
+
+                    objParam = xmlDoc.CreateElement( "StuffCount" );
+                    objParam.InnerText = brickScript.stuffCount.ToString();
+                    objRoot.AppendChild( objParam );
+                    
                     break;
                 case "Player":
 
                     break;
-                // -----
+                
             }
+
+            root.AppendChild( objRoot );
+
         }
 
-        DataCenter.SaveDataToFile( xmlDoc.InnerXml, Application.dataPath + "/Resources/LevelData/", saveName, true );
+        //xmlDoc.Save( Application.dataPath + "/Resources/LevelData/" + saveName );
+        DataCenter.SaveDataToFile( xmlDoc.InnerXml, Application.dataPath + "/Resources/LevelData/", saveName, true);
         return null;
     }
-
+    /*
     /// <summary>
     /// LoadLevel
     /// </summary>
@@ -63,7 +99,29 @@ public class LevelDataWizard {
 
         return levelData;
     }
+    */
+    /// <summary>
+    /// LoadLevel 
+    /// </summary>
+    /// <param name="loadName"></param>
+    /// <returns>List<Hashtable> leveldata </returns>
+    static public List<Hashtable> LoadLevel( string loadName ) {
+        List<Hashtable> levelData = new List<Hashtable>();
+        XmlDocument xmlDoc = new XmlDocument();
+        xmlDoc.InnerXml = DataCenter.LoadDataFromResources( loadName, true );
 
+        XmlNodeList nodeList = xmlDoc.SelectSingleNode( "root" ).ChildNodes;
+        foreach ( XmlElement xe in nodeList ) {
+
+        }
+        // Parse the xmlDoc
+
+        return levelData;
+    }
+
+
+
+    /*
     /// <summary>
     /// LoadLevel
     /// </summary>
@@ -86,7 +144,66 @@ public class LevelDataWizard {
             callback( levelData );
         }
     }
-    
+    */
+
+    static public IEnumerator LoadLevel( string loadName, LoadLevelDataCallBack callback ) {
+        List<Hashtable> levelData = new List<Hashtable>();
+        XmlDocument xmlDoc = new XmlDocument();
+        xmlDoc.InnerXml = DataCenter.LoadDataFromResources( loadName, true );
+
+        XmlNodeList nodeList = xmlDoc.SelectSingleNode( "root" ).ChildNodes;
+        foreach ( XmlElement xe in nodeList ) {
+
+        }
+        // Parse the xmlDoc
+
+        yield return null;
+        if ( callback != null ) {
+            callback( levelData );
+        }
+    }
+
+
+    /// <summary>
+    /// Quick sort gameobject according position of axis z.
+    /// </summary>
+    /// <param name="objs">gameobject array</param>
+    /// <param name="start">array index start</param>
+    /// <param name="end">array index end</param>
+    static private void SortObjByPosX(ref GameObject[] objs,int start,int end ) {
+        if ( objs.Length <= 0 ) { return; }
+        GameObject key = objs[start];
+        int prev = start;
+        int last = end;
+
+        if ( start >= end ) { return; }
+
+        while ( prev < last ) {
+            // left
+            while ( prev < last ) {
+                if ( objs[last].transform.position.x < key.transform.position.x ) {
+                    objs[prev] = objs[last];
+                    ++prev;
+                    break;
+                }
+                --last;
+            }
+
+            // right
+            while ( prev < last ) {
+                if ( objs[prev].transform.position.x > key.transform.position.x ) {
+                    objs[last] = objs[prev];
+                    --last;
+                    break;
+                }
+                ++prev;
+            }
+        }
+
+        objs[last] = key;
+        SortObjByPosX( ref objs, start, last - 1 );
+        SortObjByPosX( ref objs, last + 1, end );
+    }
 
 }
 

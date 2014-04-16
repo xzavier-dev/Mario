@@ -11,7 +11,9 @@ public class GlobalGameController {
 
     private bool isGameOver = false;
 
-
+    /// <summary>
+    /// In GlobalManager, at this class be created , InitGameConfigure be called.
+    /// </summary>
     public void InitGameConfigure() {
         Application.targetFrameRate = 60;
     }
@@ -19,6 +21,7 @@ public class GlobalGameController {
     public bool IsGameOver() {
         return isGameOver;
     }
+
 
     public void SetGameOver() {
         isGameOver = true;
@@ -41,5 +44,14 @@ public class GlobalGameController {
     public void SavePlayerInfo() {
 
 
+    }
+
+    public void LoadNewLevel( string levelName ) {
+        Application.LoadLevel( levelName );
+    }
+
+
+    public void ChangeCameraView() {
+        GameObject.FindGameObjectWithTag( "MainCamera" ).GetComponent<CameraFollowControl>().ChangeView();
     }
 }

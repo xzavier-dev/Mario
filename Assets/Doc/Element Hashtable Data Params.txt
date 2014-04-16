@@ -1,0 +1,11 @@
+Universal:
+	ObjName : string
+	Pos     : Vecto3
+
+Brick:
+
+
+Player:
+
+
+

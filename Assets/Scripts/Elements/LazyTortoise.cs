@@ -5,12 +5,6 @@ public class LazyTortoise : MonoBehaviour {
 
 
 
-    void OnCollisionEnter( Collision obj ) {
-
-    }
-
-    void BeKilled() {
-
-    }
+   
 
 }

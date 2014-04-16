@@ -19,13 +19,21 @@ public class Monster : MonoBehaviour {
         if ( obj.gameObject.CompareTag( "Pipeline" ) ) {
             dir = -dir;
         }
-    }
 
-    void OnCollisionEnter( Collision obj ) {
+        // Kill the player
         if ( obj.gameObject.CompareTag( "Player" ) ) {
-            obj.gameObject.SendMessage( "BeKilled" );
+            obj.SendMessage( "BeKilled" );
         }
     }
+
+
+    /// <summary>
+    /// When i be killed by player, the below function would be called
+    /// </summary>
+    void BeKilled() {
+
+    }
+
 
     void GameOver() {
         this.enabled = false;

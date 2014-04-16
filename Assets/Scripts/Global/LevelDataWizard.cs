@@ -17,7 +17,7 @@ public class LevelDataWizard {
     //public delegate void LoadLevelDataCallBack(Dictionary<string,Hashtable> levelData);
     public delegate void LoadLevelDataCallBack( List<Hashtable> levelData );
     /// <summary>
-    /// SaveLevel
+    /// In Editor mode , search all the gameobject that layer of 'Element' and save there parameter to Xml file, the parameter define in /Doc/element_params.xls
     /// </summary>
     /// <param name="saveName">xml level name</param>
     /// <returns>XmlDoc</returns>
@@ -87,28 +87,14 @@ public class LevelDataWizard {
         DataCenter.SaveDataToFile( xmlDoc.InnerXml, Application.dataPath + "/Resources/LevelData/", saveName, true);
         return null;
     }
-    /*
+   
+
+
     /// <summary>
-    /// LoadLevel
-    /// </summary>
-    /// <param name="loadName">level name of xml file</param>
-    /// <returns>Dictionary<string,Hashtable> level data</returns>
-    static public Dictionary<string,Hashtable> LoadLevel(string loadName) {
-        Dictionary<string,Hashtable> levelData = new Dictionary<string, Hashtable>();
-        XmlDocument xmlDoc = new XmlDocument();
-        xmlDoc.InnerXml = DataCenter.LoadDataFromResources( loadName, true );
-
-        XmlNodeList nodeList = xmlDoc.SelectSingleNode( "root" ).ChildNodes;
-        foreach ( XmlElement xe in nodeList ) {
-
-        }
-        // Parse the xmlDoc
-
-        return levelData;
-    }
-    */
-    /// <summary>
-    /// LoadLevel 
+    /// when the game begin, below function will load level data from xml file, and parse that to currect variable class
+    /// Vector3, float , etc... and save all that parameters to a Hashtable, every hashtable is a gameobject, 
+    /// that include Prefab name, Position, and there parameters, after that, save all the hashtable to a List, and return
+    /// to LevelLoder, then it can load prefab and init the level.
     /// </summary>
     /// <param name="loadName"></param>
     /// <returns>List<Hashtable> leveldata </returns>
@@ -126,32 +112,6 @@ public class LevelDataWizard {
         return levelData;
     }
 
-
-
-    /*
-    /// <summary>
-    /// LoadLevel
-    /// </summary>
-    /// <param name="levelName">level name of xml file</param>
-    /// <param name="callback">load level data by Conroutine, load finished , callback</param>
-    /// <returns>null</returns>
-    static public IEnumerator LoadLevel( string loadName,LoadLevelDataCallBack callback) {
-        Dictionary<string,Hashtable> levelData = new Dictionary<string, Hashtable>();
-        XmlDocument xmlDoc = new XmlDocument();
-        xmlDoc.InnerXml = DataCenter.LoadDataFromResources( loadName, true );
-
-        XmlNodeList nodeList = xmlDoc.SelectSingleNode( "root" ).ChildNodes;
-        foreach ( XmlElement xe in nodeList ) {
-
-        }
-        // Parse the xmlDoc
-        
-        yield return null;
-        if ( callback != null ) {
-            callback( levelData );
-        }
-    }
-    */
 
     static public IEnumerator LoadLevel( string loadName, LoadLevelDataCallBack callback ) {
         List<Hashtable> levelData = new List<Hashtable>();

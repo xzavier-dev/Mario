@@ -19,7 +19,7 @@ public class GlobalManager {
         get {
             if ( _globalGameController == null ) {
                 _globalGameController = new GlobalGameController();
-                Application.targetFrameRate = 60;
+                _globalGameController.InitGameConfigure();
             }
             return _globalGameController;
         }
